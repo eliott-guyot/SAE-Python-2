@@ -48,7 +48,7 @@ def est_mur(case):
         bool: True si la case est un mur et False sinon
     """
 
-    return case
+    return case['mur']
 
 
 def get_objet(case):
