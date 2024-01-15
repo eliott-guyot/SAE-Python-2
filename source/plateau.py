@@ -103,7 +103,7 @@ def pos_arrivee(plateau,pos,direction):
     Returns:
         None|tuple: None ou une paire d'entiers indiquant la position d'arrivée
     """
-    if pos not in const.DIRECTIONS:
+    if direction not in const.DIRECTIONS:
         return None
 
     match direction:
@@ -116,9 +116,9 @@ def pos_arrivee(plateau,pos,direction):
         case 'O':
             pos = pos_ouest(plateau, pos)
         case _:
-            return None
+            return "Tom"
     
-    if pos[0] > get_nb_lignes(plateau) - 1:
+    if pos[0] >= get_nb_lignes(plateau) - 1:
         pos = (0, pos[1])
 
     if pos[0] < 0:
@@ -164,6 +164,7 @@ def poser_pacman(plateau, pacman, pos):
         pos (tuple): une paire (lig,col) de deux int
     """
     
+    plateau["pacmans"].add((pacman, pos))
     case.poser_pacman(get_case(plateau, pos), pacman)
 
 
@@ -175,7 +176,8 @@ def poser_fantome(plateau, fantome, pos):
         fantome (str): la lettre représentant le fantome
         pos (tuple): une paire (lig,col) de deux int
     """
-    
+
+    plateau["fantomes"].add((fantome, pos))
     case.poser_fantome(get_case(plateau, pos), fantome)
 
 
@@ -232,13 +234,17 @@ def Plateau(la_chaine):
     nb_pacmans = int(lignes[plateau["taille"][0] + 1])
     for i in range(nb_pacmans):
         pacman = lignes[plateau["taille"][0] + 2 + i].split(";")
-        plateau["pacmans"].add((pacman[0], (int(pacman[1]), int(pacman[2]))))
+        x, y = int(pacman[1]), int(pacman[2])
+        plateau["pacmans"].add((pacman[0], (x, y)))
+        case.poser_pacman(get_case(plateau, (x, y)), pacman[0])
 
     # Place les fantomes
     nb_fantomes = int(lignes[plateau["taille"][0] + 2 + nb_pacmans])
     for i in range(nb_fantomes):
         fantome = lignes[plateau["taille"][0] + 3 + nb_pacmans + i].split(";")
+        x, y = int(pacman[1]), int(pacman[2])
         plateau["fantomes"].add((fantome[0], (int(fantome[1]), int(fantome[2]))))
+        case.poser_fantome(get_case(plateau, (x, y)), fantome[0])
 
     return plateau
 
@@ -267,6 +273,9 @@ def enlever_pacman(plateau, pacman, pos):
         bool: True si l'opération s'est bien déroulée, False sinon
     """
 
+    if pacman in plateau["pacmans"]:
+        plateau["pacmans"].remove((pacman, pos))
+    
     return case.prendre_pacman(get_case(plateau, pos), pacman)
 
 
