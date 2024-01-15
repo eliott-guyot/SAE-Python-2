@@ -7,6 +7,7 @@
 """
 import const
 
+
 def Case(mur=False, objet=const.AUCUN, pacmans_presents=None, fantomes_presents=None):
     """Permet de créer une case du plateau
 
@@ -23,8 +24,19 @@ def Case(mur=False, objet=const.AUCUN, pacmans_presents=None, fantomes_presents=
     Returns:
         dict: un dictionnaire représentant une case du plateau
     """
-    pass
+    if pacmans_presents is None:
+        pacmans_presents = set()
 
+    if fantomes_presents is None:
+        fantomes_presents = set()
+
+    return {
+        "mur": mur,
+        "objet": objet,
+        "pacmans_presents": pacmans_presents,
+        "fantomes_presents": fantomes_presents
+    }
+    
 
 def est_mur(case):
     """indique si la case est un mur ou non
