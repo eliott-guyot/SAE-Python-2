@@ -49,7 +49,10 @@ def pos_ouest(plateau, pos):
         int: un tuple d'entiers
     """
     
-    return pos[0], pos[1] - 1
+    ouest=[pos[0],pos[1]-1]
+    if ouest[1] < 0:
+        ouest[1]=get_nb_colonnes(plateau)-1
+    return tuple(ouest)
 
 
 def pos_est(plateau, pos):
@@ -62,8 +65,10 @@ def pos_est(plateau, pos):
         int: un tuple d'entiers
     """
     
-    return pos[0], pos[1] + 1
-
+    est=[pos[0],pos[1]+1]
+    if est[1] >=get_nb_colonnes(plateau):
+        est[1]=0
+    return tuple(est)
 
 def pos_nord(plateau, pos):
     """retourne la position de la case au nord de pos
@@ -75,9 +80,10 @@ def pos_nord(plateau, pos):
         int: un tuple d'entiers
     """
     
-    return pos[0] - 1, pos[1]
-
-
+    nord=[pos[0]-1,pos[1]]
+    if nord[0]<0:
+        nord[0]=get_nb_lignes(plateau)-1
+    return tuple(nord)
 def pos_sud(plateau, pos):
     """retourne la position de la case au sud de pos
 
@@ -88,9 +94,10 @@ def pos_sud(plateau, pos):
         int: un tuple d'entiers
     """
     
-    return pos[0] + 1, pos[1]
-
-
+    sud=[pos[0]+1,pos[1]]
+    if sud[0] >=get_nb_lignes(plateau):
+        sud[0]=0
+    return tuple(sud)
 def pos_arrivee(plateau,pos,direction):
     """ calcule la position d'arrivée si on part de pos et qu'on va dans
     la direction indiquée en tenant compte que le plateau est un tore
@@ -288,12 +295,11 @@ def enlever_fantome(plateau, fantome, pos):
     Returns:
         bool: True si l'opération s'est bien déroulée, False sinon
     """
-    
-    if case.prendre_fantome(get_case(plateau, pos), fantome):
+
+    if fantome in plateau["fantomes"]:
         plateau["fantomes"].remove((fantome, pos))
-        return True
-    
-    return False
+
+    return case.prendre_fantome(get_case(plateau, pos), fantome)
 
 def prendre_objet(plateau, pos):
     """Prend l'objet qui se trouve en position pos du plateau et retourne l'entier
