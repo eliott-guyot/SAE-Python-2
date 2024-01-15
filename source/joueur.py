@@ -206,9 +206,12 @@ def ajouter_objet(joueur, objet):
         joueur (dict): le joueur considéré
         objet (int): l'objet considéré
     """
-    joueur['objets']+=objet
-    joueur["nb_points"]+=const.PROP_OBJET
+    if const.PROP_OBJET[objet][1]>0:
+        joueur["objet"][objet]+=const.PROP_OBJET[objet][1]
+        add_points(joueur,const.PROP_OBJET[objet][0])
 
+
+    
 
 def maj_duree(joueur):
     """décrémente la durée de vie des objets possédés par le joueur.
@@ -217,8 +220,11 @@ def maj_duree(joueur):
     Args:
         joueur (dict): le joueur considéré
     """
-    if joueur['objets']>0:
-        joueur["objets"]-=1
+    dico=joueur["objets"]
+    for elem in dico:
+        if dico[elem]!=0:
+            dico[elem]-=1
+    joueur["objets"]=dico
 
 # A NE PAS DEMANDER
 def joueur_2_str(joueur,separateur=";"):
