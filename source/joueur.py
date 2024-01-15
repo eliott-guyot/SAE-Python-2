@@ -109,7 +109,8 @@ def get_objets(joueur):
     Returns:
         list(int): la liste des objets possédés par le joueur
     """
-    return joueur["objets"]
+    tab=list(joueur["objets"])
+    return tab
 
 def get_duree(joueur,objet):
     """retourne la duree de vie de l'objet possédé par le joueur
@@ -174,6 +175,7 @@ def add_points(joueur, quantite):
         int: le nouveau nombre de points du joueur
     """
     joueur["nb_points"] += quantite
+    return joueur['nb_points']
 
 def faux_mouvement(joueur):
     """Enlève 1 au nombre de faux mouvements autorisés pour le joueur
@@ -184,6 +186,7 @@ def faux_mouvement(joueur):
         int: le nombre de faux mouvements autorisés restants
     """
     joueur["nb_faux_mvt"] -= 1
+    return joueur["nb_faux_mvt"]
 
 def reinit_faux_mouvements(joueur):
     """Réinitialise le nombre de faux mouvements autorisés pour le joueur
@@ -191,7 +194,8 @@ def reinit_faux_mouvements(joueur):
     Args:
         joueur (dict): le joueur considéré
     """
-    joueur["nb_faux_mvt"] = Joueur["nb_faux_mvt"]
+    if faux_mouvement(joueur) == Joueur["nb_faux_mvt"]:
+        joueur["nb_faux_mvt"]=0
 
 
 def ajouter_objet(joueur, objet):
@@ -203,9 +207,15 @@ def ajouter_objet(joueur, objet):
         joueur (dict): le joueur considéré
         objet (int): l'objet considéré
     """
-    joueur["objets"]+=objet
-    joueur["nb_points"]+=const.PROP_OBJET
+    if const.PROP_OBJET[objet][1]>0:
+        joueur["objet"][objet]+=const.PROP_OBJET[objet][1]
+        add_points(joueur,const.PROP_OBJET[objet][0])
+    else:
+        joueur["objet"][objet]==const.PROP_OBJET[objet][1]
+        add_points(joueur,const.PROP_OBJET[objet][0])
 
+
+    
 
 def maj_duree(joueur):
     """décrémente la durée de vie des objets possédés par le joueur.
@@ -214,8 +224,11 @@ def maj_duree(joueur):
     Args:
         joueur (dict): le joueur considéré
     """
-    if joueur['objets']>0:
-        joueur["objets"]-=1
+    dico=joueur["objets"]
+    for elem in dico:
+        if dico[elem]!=0:
+            dico[elem]-=1
+    joueur["objets"]=dico
 
 # A NE PAS DEMANDER
 def joueur_2_str(joueur,separateur=";"):
