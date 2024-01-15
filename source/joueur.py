@@ -174,7 +174,7 @@ def add_points(joueur, quantite):
     Returns:
         int: le nouveau nombre de points du joueur
     """
-    joueur["nb_points"] += quantite
+    return joueur["nb_points"] + quantite
 
 def faux_mouvement(joueur):
     """Enlève 1 au nombre de faux mouvements autorisés pour le joueur
@@ -184,7 +184,7 @@ def faux_mouvement(joueur):
     Returns:
         int: le nombre de faux mouvements autorisés restants
     """
-    joueur["nb_faux_mvt"] -= 1
+    return joueur["nb_faux_mvt"] - 1
 
 def reinit_faux_mouvements(joueur):
     """Réinitialise le nombre de faux mouvements autorisés pour le joueur
