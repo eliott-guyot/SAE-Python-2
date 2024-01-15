@@ -194,7 +194,8 @@ def reinit_faux_mouvements(joueur):
     Args:
         joueur (dict): le joueur considéré
     """
-    joueur["nb_faux_mvt"] = Joueur["nb_faux_mvt"]
+    if faux_mouvement(joueur) == Joueur["nb_faux_mvt"]:
+        joueur["nb_faux_mvt"]=0
 
 
 def ajouter_objet(joueur, objet):
@@ -208,6 +209,9 @@ def ajouter_objet(joueur, objet):
     """
     if const.PROP_OBJET[objet][1]>0:
         joueur["objet"][objet]+=const.PROP_OBJET[objet][1]
+        add_points(joueur,const.PROP_OBJET[objet][0])
+    else:
+        joueur["objet"][objet]==const.PROP_OBJET[objet][1]
         add_points(joueur,const.PROP_OBJET[objet][0])
 
 
