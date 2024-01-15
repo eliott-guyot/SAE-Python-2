@@ -23,7 +23,7 @@ def get_nb_lignes(plateau):
         int: le nombre de lignes du plateau
     """
 
-    return (len(plateau))
+    return plateau["taille"][0]
 
 
 def get_nb_colonnes(plateau):
@@ -36,7 +36,7 @@ def get_nb_colonnes(plateau):
         int: le nombre de colonnes du plateau
     """
 
-    return (len(plateau[0]))
+    return plateau["taille"][1]
 
 
 def pos_ouest(plateau, pos):
@@ -138,7 +138,7 @@ def get_case(plateau, pos):
         dict: La case qui se situe à la position pos du plateau
     """
 
-    return plateau[pos[0]][pos[1]]
+    return plateau["cases"][pos[0]][pos[1]]
 
 
 def get_objet(plateau, pos):
@@ -192,7 +192,7 @@ def poser_objet(plateau, objet, pos):
     case.poser_objet(get_case(plateau, pos), objet)
 
 
-def plateau_from_str(la_chaine):
+def Plateau(la_chaine):
     """Construit un plateau à partir d'une chaine de caractère contenant les informations
         sur le contenu du plateau (voir sujet)
 
@@ -202,14 +202,62 @@ def plateau_from_str(la_chaine):
     Returns:
         dict: le plateau correspondant à la chaine. None si l'opération a échoué
     """
+    # Initialise le plateau
     lignes = la_chaine.split("\n")
     plateau = {
         "cases": [],
-        "pacmans": [],
-        "fantomes": []
+        "pacmans": set(),
+        "fantomes": set()
     }
+    
+    # Définit la taille du plateau
+    taille = lignes[0].split(";")
+    plateau["taille"] = (int(taille[0]), int(taille[1]))
 
+    # Construit le labirynthe
+    for y in range(plateau["taille"][0]):
+        plateau["cases"].append([])
 
+        for elem in lignes[y + 1]:
+            if elem == const.AUCUN:
+                plateau["cases"][y].append(case.Case())
+
+            elif elem == const.VITAMINE:
+                plateau["cases"][y].append(case.Case(objet=const.VITAMINE))
+
+            elif elem == const.GLOUTON:
+                plateau["cases"][y].append(case.Case(objet=const.GLOUTON))
+
+            elif elem == const.IMMOBILITE:
+                plateau["cases"][y].append(case.Case(objet=const.IMMOBILITE))
+
+            elif elem == const.PASSEMURAILLE:
+                plateau["cases"][y].append(case.Case(objet=const.PASSEMURAILLE))
+            
+            elif elem == const.VALEUR:
+                plateau["cases"][y].append(case.Case(objet=const.VALEUR))
+
+            elif elem == const.TELEPORTATION:
+                plateau["cases"][y].append(case.Case(objet=const.TELEPORTATION))
+
+            else:
+                plateau["cases"][y].append(case.Case(mur=True))
+
+    # Place les pacmans
+    nb_pacmans = int(lignes[plateau["taille"][0] + 1])
+    for i in range(nb_pacmans):
+        pacman = lignes[plateau["taille"][0] + 2 + i].split(";")
+        plateau["pacmans"].add((pacman[0], (int(pacman[1]), int(pacman[2]))))
+
+    # Place les fantomes
+    nb_fantomes = int(lignes[plateau["taille"][0] + 2 + nb_pacmans])
+    for i in range(nb_fantomes):
+        fantome = lignes[plateau["taille"][0] + 3 + nb_pacmans + i].split(";")
+        plateau["fantomes"].add((fantome[0], (int(fantome[1]), int(fantome[2]))))
+
+    return plateau
+
+    
 def set_case(plateau, pos, une_case):
     """remplace la case qui se trouve en position pos du plateau par une_case
 
@@ -218,6 +266,8 @@ def set_case(plateau, pos, une_case):
         pos (tuple): une paire (lig,col) de deux int
         une_case (dict): la nouvelle case
     """
+
+    plateau["cases"][pos[0]][pos[1]] = une_case
     
 
 def enlever_pacman(plateau, pacman, pos):
