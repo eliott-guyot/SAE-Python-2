@@ -109,7 +109,8 @@ def get_objets(joueur):
     Returns:
         list(int): la liste des objets possédés par le joueur
     """
-    return joueur["objets"]
+    tab=list(joueur["objets"])
+    return tab
 
 def get_duree(joueur,objet):
     """retourne la duree de vie de l'objet possédé par le joueur
@@ -173,7 +174,8 @@ def add_points(joueur, quantite):
     Returns:
         int: le nouveau nombre de points du joueur
     """
-    return joueur["nb_points"] + quantite
+    joueur["nb_points"] += quantite
+    return joueur['nb_points']
 
 def faux_mouvement(joueur):
     """Enlève 1 au nombre de faux mouvements autorisés pour le joueur
@@ -183,7 +185,8 @@ def faux_mouvement(joueur):
     Returns:
         int: le nombre de faux mouvements autorisés restants
     """
-    return joueur["nb_faux_mvt"] - 1
+    joueur["nb_faux_mvt"] -= 1
+    return joueur["nb_faux_mvt"]
 
 def reinit_faux_mouvements(joueur):
     """Réinitialise le nombre de faux mouvements autorisés pour le joueur
@@ -203,7 +206,7 @@ def ajouter_objet(joueur, objet):
         joueur (dict): le joueur considéré
         objet (int): l'objet considéré
     """
-    joueur["objets"]+=objet
+    joueur['objets']+=objet
     joueur["nb_points"]+=const.PROP_OBJET
 
 

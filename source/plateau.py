@@ -23,8 +23,7 @@ def get_nb_lignes(plateau):
         int: le nombre de lignes du plateau
     """
 
-    return (len(plateau))
-
+    return 
 
 def get_nb_colonnes(plateau):
     """retourne le nombre de colonnes du plateau
@@ -208,6 +207,23 @@ def plateau_from_str(la_chaine):
         "pacmans": [],
         "fantomes": []
     }
+    
+
+
+def Plateau(plan):
+    """Créer un plateau en respectant le plan donné en paramètre.
+        Le plan est une chaine de caractères contenant
+            '#' (mur)
+            ' ' (couloir non peint)
+            une lettre majuscule (un couloir peint par le joueur représenté par la lettre)
+
+    Args:
+        plan (str): le plan sous la forme d'une chaine de caractères
+
+    Returns:
+        dict: Le plateau correspondant au plan
+    """
+    pass
 
 
 def set_case(plateau, pos, une_case):
