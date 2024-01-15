@@ -73,7 +73,9 @@ def get_pacmans(case):
     Returns:
         set: l'ensemble des identifiants de pacmans présents su la case.
     """
-    pass
+
+    return case["pacmans_presents"]
+
 
 def get_fantomes(case):
     """retourne l'ensemble des fantomes qui sont sur la case
@@ -84,7 +86,8 @@ def get_fantomes(case):
     Returns:
         set: l'ensemble des identifiants de fantomes présents su la case.
     """
-    pass
+
+    return case["fantomes_presents"]
 
 
 def get_nb_pacmans(case):
@@ -96,7 +99,8 @@ def get_nb_pacmans(case):
     Returns:
         int: le nombre de pacmans présents sur la case.
     """
-    pass
+    
+    return len(get_pacmans(case))
 
 def get_nb_fantomes(case):
     """retourne le nombre de fantomes présents sur la case
