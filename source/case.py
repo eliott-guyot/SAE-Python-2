@@ -47,7 +47,7 @@ def est_mur(case):
     Returns:
         bool: True si la case est un mur et False sinon
     """
-    pass
+    return case
 
 
 
