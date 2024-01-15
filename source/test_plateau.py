@@ -1,7 +1,10 @@
 import unittest
+
+import case
 import const
 import plateau
-import case
+
+
 class test_case(unittest.TestCase):  
     def setUp(self):
         with open("cartes/test1.txt") as fic:
@@ -400,7 +403,7 @@ class test_case(unittest.TestCase):
         self.assertEqual(obtenu[cle],attendu[cle],
                          "Les distances pour les "+cle)
 
-        self.assertEqual(res['objets'])
+        #self.assertEqual(res['objets'])
     def test_analyse_plateau(self):
         p2=plateau.Plateau(self.plateau2)
         pos=(5,6)

@@ -222,23 +222,8 @@ def Plateau(la_chaine):
             if elem == const.AUCUN:
                 plateau["cases"][y].append(case.Case())
 
-            elif elem == const.VITAMINE:
-                plateau["cases"][y].append(case.Case(objet=const.VITAMINE))
-
-            elif elem == const.GLOUTON:
-                plateau["cases"][y].append(case.Case(objet=const.GLOUTON))
-
-            elif elem == const.IMMOBILITE:
-                plateau["cases"][y].append(case.Case(objet=const.IMMOBILITE))
-
-            elif elem == const.PASSEMURAILLE:
-                plateau["cases"][y].append(case.Case(objet=const.PASSEMURAILLE))
-            
-            elif elem == const.VALEUR:
-                plateau["cases"][y].append(case.Case(objet=const.VALEUR))
-
-            elif elem == const.TELEPORTATION:
-                plateau["cases"][y].append(case.Case(objet=const.TELEPORTATION))
+            elif elem in const.LES_OBJETS:
+                plateau["cases"][y].append(case.Case(objet=elem))
 
             else:
                 plateau["cases"][y].append(case.Case(mur=True))
