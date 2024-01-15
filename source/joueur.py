@@ -54,9 +54,9 @@ def joueur_from_str(description):
                   (int(description[3]), int(description[4])),
                   (int(description[7]), int(description[6])),
                   {
-                    "glouton": int(description[7]),
-                    "immobilite": int(description[8]),
-                    "passemuraille": int(description[9])
+                    const.GLOUTON: int(description[7]),
+                    const.IMMOBILITE: int(description[8]),
+                    const.PASSEMURAILLE: int(description[9])
                   }
                  )
 
