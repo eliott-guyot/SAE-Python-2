@@ -24,7 +24,15 @@ def Joueur(couleur, nom, nb_points, nb_faux_mvt, pos_pacman, pos_fantome, objets
     Returns:
         dict: un dictionnaire représentant le joueur
     """
-    pass
+    return {
+        "couleur":couleur,
+        "nom":nom,
+        "nb_points":nb_points,
+        "nb_faux_mvt":nb_faux_mvt,
+        "pos_pacman":pos_pacman,
+        "pos_fantome":pos_fantome,
+        "objets":objets
+    }
 
 def joueur_from_str(description):
     """créer un joueur à partir d'un chaine de caractères qui contient
@@ -38,7 +46,7 @@ def joueur_from_str(description):
     Returns:
         dict: le joueur ayant les caractéristiques décrite dans la chaine.
     """
-    pass
+    return description["description"]
 
 def get_couleur(joueur):
     """retourne la couleur du joueur
@@ -49,7 +57,7 @@ def get_couleur(joueur):
     Returns:
         str: une lettre indiquant la couleur du joueur
     """
-    pass
+    return joueur["couleur"]
 
 
 def get_nom(joueur):
@@ -61,7 +69,7 @@ def get_nom(joueur):
     Returns:
         str: le nom du joueur
     """
-    pass
+    return joueur["nom"]
 
 
 def get_nb_points(joueur):
@@ -80,7 +88,7 @@ def get_nb_faux_mvt(joueur):
     Returns:
         int: le nombre de faux mouvements autorisés du joueur
     """
-    pass
+    return joueur["nb_faux_mvt"]
 
 def get_objets(joueur):
     """retourne la liste des objets possédés par le joueur
@@ -89,7 +97,7 @@ def get_objets(joueur):
     Returns:
         list(int): la liste des objets possédés par le joueur
     """
-    pass
+    return joueur["objets"]
 
 def get_duree(joueur,objet):
     """retourne la duree de vie de l'objet possédé par le joueur
@@ -100,7 +108,10 @@ def get_duree(joueur,objet):
         int: un entier indiquant la durée de vie l'objet possédé par le joueur
             0 indique que le joueur n'a pas l'objet ou que celui-ci a une durée de vie de 0
     """
-    pass
+    if objet is None or joueur["objets"]==0:
+        return 0
+    else:
+        return joueur['objets']
 
 def get_pos_pacman(joueur):
     """retourne la position du pacman du joueur. ATTENTION c'est la position stockée dans le
@@ -110,7 +121,7 @@ def get_pos_pacman(joueur):
     Returns:
         tuple: une paire d'entiers indiquant la position du pacman du joueur.
     """
-    pass
+    
 
 def get_pos_fantome(joueur):
     """retourne la position du fantome du joueur. ATTENTION c'est la position stockée dans le
