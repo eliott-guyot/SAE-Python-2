@@ -121,7 +121,7 @@ def get_pos_pacman(joueur):
     Returns:
         tuple: une paire d'entiers indiquant la position du pacman du joueur.
     """
-    
+    return joueur['pos_pacman']
 
 def get_pos_fantome(joueur):
     """retourne la position du fantome du joueur. ATTENTION c'est la position stockée dans le
@@ -131,7 +131,7 @@ def get_pos_fantome(joueur):
     Returns:
         tuple: une paire d'entiers indiquant la position du fantome du joueur.
     """
-    pass
+    return joueur['pos_fantome']
 
 def set_pos_pacman(joueur, pos):
     """met à jour la position du pacman du joueur
