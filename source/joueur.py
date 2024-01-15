@@ -46,7 +46,6 @@ def joueur_from_str(description):
     Returns:
         dict: le joueur ayant les caractéristiques décrite dans la chaine.
     """
-    # couleur, nom, nb_points, nb_faux_mvt, pos_pacman, pos_fantome, objets
     description = description.split(";")
     print(description)
     return Joueur(description[0], 
