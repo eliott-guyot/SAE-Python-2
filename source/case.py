@@ -47,9 +47,8 @@ def est_mur(case):
     Returns:
         bool: True si la case est un mur et False sinon
     """
+
     return case
-
-
 
 
 def get_objet(case):
@@ -111,7 +110,8 @@ def get_nb_fantomes(case):
     Returns:
         int: le nombre de fantomes présents sur la case.
     """
-    pass
+    
+    return len(get_fantomes(case))
 
 def get_objet(case):
     """retourne l'objet qui est sur la case.
@@ -120,7 +120,9 @@ def get_objet(case):
     Args:
         case (dict): la case considérée
     """
-    pass
+    
+    return case["objet"]
+
 
 def poser_objet(case, objet):
     """Pose un objet sur la case. Si un objet était déjà présent ce dernier disparait.
@@ -131,7 +133,9 @@ def poser_objet(case, objet):
         objet (str): identifiant d'objet. const.AUCUN indiquant que plus aucun objet se
                 trouve sur la case.
     """
-    pass
+    
+    case["objet"] = objet
+
 
 def prendre_objet(case):
     """Enlève l'objet qui se trouve sur la case et retourne l'identifiant de cet objet.
@@ -143,7 +147,11 @@ def prendre_objet(case):
     Returns:
         char: l'identifiant de l'objet qui se trouve sur la case.
     """
-    pass
+    
+    objet = get_objet(case)
+    poser_objet(case, const.AUCUN)
+    return objet
+
 
 def poser_pacman(case, pacman):
     """Pose un nouveau pacman sur la case.
@@ -154,7 +162,8 @@ def poser_pacman(case, pacman):
         case (dict): la case considérée
         pacman (str): identifiant du pacman à ajouter sur la case
     """
-    pass
+    
+    case["pacmans_presents"].add(pacman)
 
 
 def prendre_pacman(case, pacman):
@@ -168,7 +177,13 @@ def prendre_pacman(case, pacman):
     Returns:
         bool: True si le joueur était bien sur la case et False sinon.
     """
-    pass
+    
+    if pacman in case["pacmans_presents"]:
+        case["pacmans_presents"].remove(pacman)
+        return True
+    
+    return False
+
 
 def poser_fantome(case, fantome):
     """Pose un nouveau fantome sur la case
@@ -179,7 +194,8 @@ def poser_fantome(case, fantome):
         case (dict): la case considérée
         fantome (str): identifiant du fantome à ajouter sur la case
     """
-    pass
+
+    case["fantomes_presents"].add(fantome)
 
 
 def prendre_fantome(case, fantome):
@@ -193,4 +209,9 @@ def prendre_fantome(case, fantome):
     Returns:
         bool: True si le fantome était bien sur la case et False sinon.
     """
-    pass
+    
+    if fantome in case["fantomes_presents"]:
+        case["fantomes_presents"].remove(fantome)
+        return True
+    
+    return False
