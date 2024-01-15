@@ -110,9 +110,6 @@ def pos_arrivee(plateau,pos,direction):
     Returns:
         None|tuple: None ou une paire d'entiers indiquant la position d'arrivée
     """
-    if direction not in const.DIRECTIONS:
-        return None
-
     match direction:
         case 'N':
             pos = pos_nord(plateau, pos)
@@ -249,8 +246,8 @@ def Plateau(la_chaine):
     nb_fantomes = int(lignes[plateau["taille"][0] + 2 + nb_pacmans])
     for i in range(nb_fantomes):
         fantome = lignes[plateau["taille"][0] + 3 + nb_pacmans + i].split(";")
-        x, y = int(pacman[1]), int(pacman[2])
-        plateau["fantomes"].add((fantome[0], (int(fantome[1]), int(fantome[2]))))
+        x, y = int(fantome[1]), int(fantome[2])
+        plateau["fantomes"].add((fantome[0], (x, y)))
         case.poser_fantome(get_case(plateau, (x, y)), fantome[0])
 
     return plateau
@@ -280,10 +277,11 @@ def enlever_pacman(plateau, pacman, pos):
         bool: True si l'opération s'est bien déroulée, False sinon
     """
 
-    if pacman in plateau["pacmans"]:
+    if case.prendre_pacman(get_case(plateau, pos), pacman):
         plateau["pacmans"].remove((pacman, pos))
+        return True
     
-    return case.prendre_pacman(get_case(plateau, pos), pacman)
+    return False
 
 
 def enlever_fantome(plateau, fantome, pos):
@@ -302,7 +300,6 @@ def enlever_fantome(plateau, fantome, pos):
         plateau["fantomes"].remove((fantome, pos))
 
     return case.prendre_fantome(get_case(plateau, pos), fantome)
-
 
 def prendre_objet(plateau, pos):
     """Prend l'objet qui se trouve en position pos du plateau et retourne l'entier
