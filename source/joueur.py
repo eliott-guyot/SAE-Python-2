@@ -47,17 +47,16 @@ def joueur_from_str(description):
         dict: le joueur ayant les caractéristiques décrite dans la chaine.
     """
     description = description.split(";")
-    print(description)
     return Joueur(description[0], 
                   description[-1],
-                  description[1],
-                  description[3],
-                  (description[4], description[5]),
-                  (description[6],description[7]),
+                  int(description[1]),
+                  int(description[2]),
+                  (int(description[3]), int(description[4])),
+                  (int(description[7]), int(description[6])),
                   {
-                    "glouton": description[8],
-                    "immobilite": description[9],
-                    "passemuraille": description[10]
+                    "glouton": int(description[7]),
+                    "immobilite": int(description[8]),
+                    "passemuraille": int(description[9])
                   }
                  )
 
