@@ -192,7 +192,7 @@ def poser_objet(plateau, objet, pos):
     case.poser_objet(get_case(plateau, pos), objet)
 
 
-def plateau_from_str(la_chaine, complet=True):
+def plateau_from_str(la_chaine):
     """Construit un plateau à partir d'une chaine de caractère contenant les informations
         sur le contenu du plateau (voir sujet)
 
@@ -202,23 +202,12 @@ def plateau_from_str(la_chaine, complet=True):
     Returns:
         dict: le plateau correspondant à la chaine. None si l'opération a échoué
     """
-    pass
-
-
-def Plateau(plan):
-    """Créer un plateau en respectant le plan donné en paramètre.
-        Le plan est une chaine de caractères contenant
-            '#' (mur)
-            ' ' (couloir non peint)
-            une lettre majuscule (un couloir peint par le joueur représenté par la lettre)
-
-    Args:
-        plan (str): le plan sous la forme d'une chaine de caractères
-
-    Returns:
-        dict: Le plateau correspondant au plan
-    """
-    pass
+    lignes = la_chaine.split("\n")
+    plateau = {
+        "cases": [],
+        "pacmans": [],
+        "fantomes": []
+    }
 
 
 def set_case(plateau, pos, une_case):
@@ -230,7 +219,6 @@ def set_case(plateau, pos, une_case):
         une_case (dict): la nouvelle case
     """
     
-
 
 def enlever_pacman(plateau, pacman, pos):
     """enlève un joueur qui se trouve en position pos sur le plateau
