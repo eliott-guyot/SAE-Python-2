@@ -46,10 +46,10 @@ def joueur_from_str(description):
     Returns:
         dict: le joueur ayant les caractéristiques décrite dans la chaine.
     """
-    description=description.split(";")
+    description.split(";")
     return Joueur[description[0],description[2],description[3],description[4][0],
-                  description[4][1],description[5][0],description[5][0],description[6]["duree_glout"]
-                 ,description[6]["duree_immo"],description[6]["duree_mur"],description[1]]
+                  description[4][1],description[5][0],description[5][0],description[6]["duree_glout"],
+                 description[6]["duree_immo"],description[6]["duree_mur"],description[1]]
 
 def get_couleur(joueur):
     """retourne la couleur du joueur
