@@ -191,7 +191,8 @@ def ajouter_objet(joueur, objet):
         joueur (dict): le joueur considéré
         objet (int): l'objet considéré
     """
-    pass
+    joueur["objets"]+=objet
+    joueur["nb_points"]+=const.PROP_OBJET
 
 
 def maj_duree(joueur):
