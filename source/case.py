@@ -60,7 +60,7 @@ def get_objet(case):
     Returns:
         str: l'identifiant de l'objet qui se trouve sur la case.
     """
-    pass
+    return case["objet"]
 
 
 def get_pacmans(case):
