@@ -49,7 +49,13 @@ def pos_ouest(plateau, pos):
         int: un tuple d'entiers
     """
     
-    return pos[0], pos[1] - 1
+    if pos[0] > get_nb_lignes(plateau) - 1:
+        pos = (0, pos[1])
+
+    if pos[0] < 0:
+        pos = (get_nb_lignes(plateau) - 1, pos[1])
+
+    return pos
 
 
 def pos_est(plateau, pos):
@@ -62,7 +68,13 @@ def pos_est(plateau, pos):
         int: un tuple d'entiers
     """
     
-    return pos[0], pos[1] + 1
+    if pos[0] > get_nb_colonnes(plateau) + 1:
+        pos = (0, pos[1])
+
+    if pos[0] < 0:
+        pos = (get_nb_colonnes(plateau) + 1, pos[1])
+
+    return pos
 
 
 def pos_nord(plateau, pos):
@@ -75,8 +87,13 @@ def pos_nord(plateau, pos):
         int: un tuple d'entiers
     """
     
-    return pos[0] - 1, pos[1]
+    if pos[0] > get_nb_lignes(plateau) + 1:
+        pos = (0, pos[1])
 
+    if pos[0] < 0:
+        pos = (get_nb_lignes(plateau) + 1, pos[1])
+
+    return pos
 
 def pos_sud(plateau, pos):
     """retourne la position de la case au sud de pos
@@ -88,7 +105,13 @@ def pos_sud(plateau, pos):
         int: un tuple d'entiers
     """
     
-    return pos[0] + 1, pos[1]
+    if pos[0] > get_nb_lignes(plateau) - 1:
+        pos = (0, pos[1])
+
+    if pos[0] < 0:
+        pos = (get_nb_lignes(plateau) - 1, pos[1])
+
+    return pos
 
 
 def pos_arrivee(plateau,pos,direction):
