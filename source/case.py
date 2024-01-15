@@ -195,7 +195,8 @@ def poser_fantome(case, fantome):
         fantome (str): identifiant du fantome à ajouter sur la case
     """
 
-    case["fantomes_presents"].add(fantome)
+    if fantome not in case["fantomes_presents"] and not est_mur(case):
+        case["fantomes_presents"].add(fantome)
 
 
 def prendre_fantome(case, fantome):
