@@ -52,7 +52,7 @@ def joueur_from_str(description):
                   int(description[1]),
                   int(description[2]),
                   (int(description[3]), int(description[4])),
-                  (int(description[7]), int(description[6])),
+                  (int(description[5]), int(description[6])),
                   {
                     const.GLOUTON: int(description[7]),
                     const.IMMOBILITE: int(description[8]),
@@ -109,8 +109,7 @@ def get_objets(joueur):
     Returns:
         list(int): la liste des objets possédés par le joueur
     """
-    tab=list(joueur["objets"])
-    return tab
+    return [objet for objet in joueur["objets"] if joueur["objets"][objet]>0]
 
 def get_duree(joueur,objet):
     """retourne la duree de vie de l'objet possédé par le joueur
@@ -121,10 +120,7 @@ def get_duree(joueur,objet):
         int: un entier indiquant la durée de vie l'objet possédé par le joueur
             0 indique que le joueur n'a pas l'objet ou que celui-ci a une durée de vie de 0
     """
-    if objet is None or joueur["objets"]==0:
-        return 0
-    else:
-        return joueur['objets']
+    return joueur['objets'].get(objet,0)
 
 def get_pos_pacman(joueur):
     """retourne la position du pacman du joueur. ATTENTION c'est la position stockée dans le
@@ -194,8 +190,7 @@ def reinit_faux_mouvements(joueur):
     Args:
         joueur (dict): le joueur considéré
     """
-    if faux_mouvement(joueur) == Joueur["nb_faux_mvt"]:
-        joueur["nb_faux_mvt"]=0
+    joueur["nb_faux_mvt"]=const.NB_FAUX_MVT
 
 
 def ajouter_objet(joueur, objet):
@@ -207,12 +202,10 @@ def ajouter_objet(joueur, objet):
         joueur (dict): le joueur considéré
         objet (int): l'objet considéré
     """
-    if const.PROP_OBJET[objet][1]>0:
-        joueur["objet"][objet]+=const.PROP_OBJET[objet][1]
-        add_points(joueur,const.PROP_OBJET[objet][0])
-    else:
-        joueur["objet"][objet]==const.PROP_OBJET[objet][1]
-        add_points(joueur,const.PROP_OBJET[objet][0])
+    if const.PROP_OBJET[objet][1] > 0:
+        joueur["objets"][objet]+=const.PROP_OBJET[objet][1]
+    
+    add_points(joueur,const.PROP_OBJET[objet][0])
 
 
     
