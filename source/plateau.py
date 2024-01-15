@@ -7,10 +7,10 @@
         qui gère le plateau jeu aussi qu'un certain nombre de fonctions
         permettant d'observer le plateau et d'aider l'IA à prendre des décisions
 """
-import const
-import case
 import random
 
+import case
+import const
 
 
 def get_nb_lignes(plateau):
@@ -116,7 +116,8 @@ def get_objet(plateau, pos):
     Returns:
         str: le caractère symbolisant l'objet
     """
-    pass
+
+    return case.get_objet(get_case(plateau, pos))
 
 def poser_pacman(plateau, pacman, pos):
     """pose un pacman en position pos sur le plateau
@@ -126,7 +127,8 @@ def poser_pacman(plateau, pacman, pos):
         pacman (str): la lettre représentant le pacman
         pos (tuple): une paire (lig,col) de deux int
     """
-    pass
+    
+    case.poser_pacman(get_case(plateau, pos), pacman)
 
 def poser_fantome(plateau, fantome, pos):
     """pose un fantome en position pos sur le plateau
@@ -136,7 +138,8 @@ def poser_fantome(plateau, fantome, pos):
         fantome (str): la lettre représentant le fantome
         pos (tuple): une paire (lig,col) de deux int
     """
-    pass
+    
+    case.poser_fantome(get_case(plateau, pos), fantome)
 
 def poser_objet(plateau, objet, pos):
     """Pose un objet en position pos sur le plateau. Si cette case contenait déjà
@@ -147,7 +150,8 @@ def poser_objet(plateau, objet, pos):
         objet (int): un entier représentant l'objet. const.AUCUN indique aucun objet
         pos (tuple): une paire (lig,col) de deux int
     """
-    pass
+    
+    case.poser_objet(get_case(plateau, pos), objet)
 
 def plateau_from_str(la_chaine, complet=True):
     """Construit un plateau à partir d'une chaine de caractère contenant les informations
@@ -188,8 +192,6 @@ def set_case(plateau, pos, une_case):
     pass
 
 
-
-
 def enlever_pacman(plateau, pacman, pos):
     """enlève un joueur qui se trouve en position pos sur le plateau
 
@@ -201,7 +203,8 @@ def enlever_pacman(plateau, pacman, pos):
     Returns:
         bool: True si l'opération s'est bien déroulée, False sinon
     """
-    pass
+
+    return case.prendre_pacman(get_case(plateau, pos), pacman)
 
 
 def enlever_fantome(plateau, fantome, pos):
@@ -215,7 +218,8 @@ def enlever_fantome(plateau, fantome, pos):
     Returns:
         bool: True si l'opération s'est bien déroulée, False sinon
     """
-    pass
+    
+    return case.prendre_fantome(get_case(plateau, pos), fantome)
 
 
 def prendre_objet(plateau, pos):
@@ -230,9 +234,10 @@ def prendre_objet(plateau, pos):
         int: l'entier représentant l'objet qui se trouvait sur la case.
         const.AUCUN indique aucun objet
     """
-    pass
-
+    
+    return case.prendre_objet(get_case(plateau, pos))
         
+
 def deplacer_pacman(plateau, pacman, pos, direction, passemuraille=False):
     """Déplace dans la direction indiquée un joueur se trouvant en position pos
         sur le plateau si c'est possible
@@ -250,6 +255,7 @@ def deplacer_pacman(plateau, pacman, pos, direction, passemuraille=False):
     """
     pass
 
+
 def deplacer_fantome(plateau, fantome, pos, direction):
     """Déplace dans la direction indiquée un fantome se trouvant en position pos
         sur le plateau
@@ -265,6 +271,7 @@ def deplacer_fantome(plateau, fantome, pos, direction):
                    None si le joueur n'a pas pu se déplacer
     """
     pass
+
 
 def case_vide(plateau):
     """choisi aléatoirement sur la plateau une case qui n'est pas un mur et qui
