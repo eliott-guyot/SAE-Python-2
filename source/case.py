@@ -133,8 +133,8 @@ def poser_objet(case, objet):
         objet (str): identifiant d'objet. const.AUCUN indiquant que plus aucun objet se
                 trouve sur la case.
     """
-    
-    case["objet"] = objet
+    if case["mur"]==False:
+        case["objet"] = objet
 
 
 def prendre_objet(case):

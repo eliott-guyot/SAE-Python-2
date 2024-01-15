@@ -22,7 +22,7 @@ def get_nb_lignes(plateau):
     Returns:
         int: le nombre de lignes du plateau
     """
-    pass
+    return (len(plateau))
 
 
 def get_nb_colonnes(plateau):
@@ -34,7 +34,8 @@ def get_nb_colonnes(plateau):
     Returns:
         int: le nombre de colonnes du plateau
     """
-    pass
+    return (len(plateau[0]))
+
 
 def pos_ouest(plateau, pos):
     """retourne la position de la case à l'ouest de pos
