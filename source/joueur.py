@@ -49,7 +49,7 @@ def get_couleur(joueur):
     Returns:
         str: une lettre indiquant la couleur du joueur
     """
-    pass
+    return joueur["couleur"]
 
 
 def get_nom(joueur):
@@ -138,7 +138,7 @@ def set_pos_fantome(joueur, pos):
         joueur (dict): le joueur considéré
         pos (tuple): une paire d'entiers (lin,col) indiquant la position du joueur
     """
-    pass
+    joueur["pos_fantome"] = pos
 
 def add_points(joueur, quantite):
     """ modifie le nombre de points du joueur.
@@ -150,7 +150,7 @@ def add_points(joueur, quantite):
     Returns:
         int: le nouveau nombre de points du joueur
     """
-    pass
+    joueur["nb_points"] += quantite
 
 def faux_mouvement(joueur):
     """Enlève 1 au nombre de faux mouvements autorisés pour le joueur
@@ -160,7 +160,7 @@ def faux_mouvement(joueur):
     Returns:
         int: le nombre de faux mouvements autorisés restants
     """
-    pass
+    joueur["nb_faux_mvt"] -= 1
 
 def reinit_faux_mouvements(joueur):
     """Réinitialise le nombre de faux mouvements autorisés pour le joueur
@@ -168,7 +168,7 @@ def reinit_faux_mouvements(joueur):
     Args:
         joueur (dict): le joueur considéré
     """
-    pass
+    joueur["nb_faux_mvt"] = Joueur["nb_faux_mvt"]
 
 
 def ajouter_objet(joueur, objet):
