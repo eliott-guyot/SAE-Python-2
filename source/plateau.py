@@ -229,7 +229,7 @@ def set_case(plateau, pos, une_case):
         pos (tuple): une paire (lig,col) de deux int
         une_case (dict): la nouvelle case
     """
-    pass
+    
 
 
 def enlever_pacman(plateau, pacman, pos):
