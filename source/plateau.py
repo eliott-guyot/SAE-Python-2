@@ -114,19 +114,20 @@ def pos_arrivee(plateau,pos,direction):
     Returns:
         None|tuple: None ou une paire d'entiers indiquant la position d'arrivée
     """
-    match direction:
-        case 'N':
-            pos = pos_nord(plateau, pos)
-        case 'S':
-            pos = pos_sud(plateau, pos)
-        case 'E':
-            pos = pos_est(plateau, pos)
-        case 'O':
-            pos = pos_ouest(plateau, pos)
-        case _:
-            return 
+    if direction == 'N':
+        return pos_nord(plateau, pos)
+
+    elif direction == 'S':
+        return pos_sud(plateau, pos)
     
-    return pos
+    elif direction == 'E':
+        return pos_est(plateau, pos)
+    
+    elif direction == 'O':
+        return pos_ouest(plateau, pos)
+
+    else:
+        return None
 
 
 def get_case(plateau, pos):
@@ -452,42 +453,62 @@ def analyse_plateau(plateau, pos, direction, distance_max):
                                     et ident est l'identifiant de l'objet, du pacman ou du fantome
             S'il n'est pas possible d'aller dans la direction indiquée à partir de pos
             la fonction retourne None
-    """ 
-    calque={}
-    for i in range (get_nb_colonnes(plateau)):
-        calque["i"]=[]
-        for j in range (get_nb_lignes(plateau)):
-            calque["i"]+=get_case(plateau,pos)
-    dico={
-        'objets':[],
-        'pacmans':[],
-        'fantomes':[]
+    """
+    res = {
+        "objets": [],
+        "pacmans": [],
+        "fantomes": []
     }
-    indice=0
-    case_cote=set()
-    while indice<distance_max:
-        case_cote.add(prochaine_intersection(plateau,pos,direction))
-        for elt in case_cote:
-            if plateau[elt] in plateau['fantomes']:
-                dico['fantomes']=(elt,get_case(plateau,pos))
-            elif plateau[elt] in plateau['objets']:
-                dico['objets']=(elt,get_case(plateau,pos))
-            elif plateau[elt] in plateau["pacmans"]:
-                dico["pacmans"]=(elt,get_case(plateau,pos))
-            elif case.est_mur(plateau['elt']):
-                return None
-                
-        case_cote=set()      
-        indice+=1
+    cases_parcourues = set()
 
-    if indice==distance_max:
-        return dico
-    else:
-        None
+    def _update_res(pos, distance):
+        case_arr = get_case(plateau, pos)
+
+        fantomes = case.get_fantomes(case_arr)
+        for fantome in fantomes:
+            res["fantomes"].append((distance, fantome))
+
+        pacmans = case.get_pacmans(case_arr)
+        for pacman in pacmans:
+            res["pacmans"].append((distance, pacman))
+
+        objet = case.get_objet(case_arr)
+        if objet != const.AUCUN:
+            res["objets"].append((distance, objet))
 
 
+    def _inondation(pos, distance):
+        if distance > distance_max:
+            return
 
-            
+        pos_arr = pos
+        for direction in directions_possibles(plateau, pos):
+            distance_intersection = prochaine_intersection(plateau, pos, direction)
+            for i in range(distance_intersection):
+                pos_arr = pos_arrivee(plateau, pos_arr, direction)
+
+                if pos_arr not in cases_parcourues and distance + i <= distance_max:    
+                    _update_res(pos_arr, distance + i)
+                    cases_parcourues.add(pos_arr)
+
+            if distance_intersection != -1:
+                print(cases_parcourues)
+                _inondation(pos_arr, distance + distance_intersection)
+
+    # Parcours le couloir jusqu'à la prochaine intersection
+    distance_intersection = prochaine_intersection(plateau, pos, direction)
+    if distance_intersection == -1:
+        return None
+    
+    for i in range(distance_intersection):
+        pos = pos_arrivee(plateau, pos, direction)
+        _update_res(pos, i)
+        cases_parcourues.add(pos)
+
+    # Commence l'inondation
+    _inondation(pos, distance_intersection)
+    return res
+
 
 def prochaine_intersection(plateau,pos,direction):
     """calcule la distance de la prochaine intersection
