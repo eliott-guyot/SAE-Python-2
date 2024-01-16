@@ -453,6 +453,11 @@ def analyse_plateau(plateau, pos, direction, distance_max):
             S'il n'est pas possible d'aller dans la direction indiquée à partir de pos
             la fonction retourne None
     """ 
+    calque={}
+    for i in range (get_nb_colonnes):
+        calque["i"]=[]
+        for j in range (get_nb_lignes):
+
     dico={
         'objets':[],
         'pacmans':[],
@@ -469,6 +474,10 @@ def analyse_plateau(plateau, pos, direction, distance_max):
                 dico['objets']=elt
             elif plateau["elt"] in plateau["pacmans"]:
                 dico["pacmans"]=elt
+            elif case.est_mur(plateau['elt']):
+                return None
+                
+        case_cote=set()      
         i+=1
     if i==distance_max:
         return dico
