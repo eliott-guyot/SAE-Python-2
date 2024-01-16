@@ -418,7 +418,17 @@ def directions_possibles(plateau,pos,passemuraille=False):
         str: une chaine de caractères indiquant les directions possibles
               à partir de pos
     """
-    pass
+    directions = ""
+    for direction in const.DIRECTIONS:
+        pos_arr = pos_arrivee(plateau, pos, direction)
+        case_arr = get_case(plateau, pos_arr)
+
+        if not case.est_mur(case_arr) or passemuraille:
+            directions += direction
+
+    return directions
+    
+
 #---------------------------------------------------------#
 
 
