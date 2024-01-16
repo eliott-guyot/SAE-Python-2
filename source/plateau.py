@@ -475,33 +475,19 @@ def analyse_plateau(plateau, pos, direction, distance_max):
     cases_parcourues = {pos}
     cases_explorables = [(pos_arrivee(plateau, pos, direction), 1)]
 
-    # Calque
-    calque = matrice.new_matrice(get_nb_lignes(plateau), get_nb_colonnes(plateau), "   ")
-    for x in range(get_nb_colonnes(plateau)):
-        for y in range(get_nb_lignes(plateau)):
-            if case.est_mur(get_case(plateau, (y, x))):
-                matrice.set_val(calque, y, x, None)
-
-
     while cases_explorables:
-        for emplacement in cases_explorables:
-            directions = directions_possibles(plateau, emplacement[0])
-            cases_parcourues.add(emplacement[0])
-            matrice.set_val(calque, *emplacement[0], str(emplacement[1]).center(3))
-            matrice.affiche_labyrinthe(calque)
-            _update_res(plateau, res, emplacement[0], emplacement[1])
+        emplacement = min(cases_explorables, key=lambda x: x[1])
+        _update_res(plateau, res, emplacement[0], emplacement[1])
+        directions = directions_possibles(plateau, emplacement[0])
+        cases_parcourues.add(emplacement[0])
 
-            for direction in directions:
-                pos_arr = pos_arrivee(plateau, emplacement[0], direction)
-                if pos_arr not in cases_parcourues:
-                    cases_explorables.append((pos_arr, emplacement[1] + 1))
-            
-            cases_explorables.remove(emplacement)
-            cases_explorables = sorted(cases_explorables, key=lambda x: x[1])[::-1]
-            print(cases_explorables)
+        for direction in directions:
+            pos_arr = pos_arrivee(plateau, emplacement[0], direction)
+            if pos_arr not in cases_parcourues:
+                cases_explorables.append((pos_arr, emplacement[1] + 1))
+        
+        cases_explorables.remove(emplacement)
 
-    matrice.set_val(calque, *pos, "._.")
-    matrice.affiche_labyrinthe(calque)
     return res
 
 
