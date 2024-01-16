@@ -300,6 +300,7 @@ def enlever_fantome(plateau, fantome, pos):
 
     return case.prendre_fantome(get_case(plateau, pos), fantome)
 
+
 def prendre_objet(plateau, pos):
     """Prend l'objet qui se trouve en position pos du plateau et retourne l'entier
         représentant cet objet. const.AUCUN indique qu'aucun objet se trouve sur case
@@ -454,6 +455,7 @@ def analyse_plateau(plateau, pos, direction, distance_max):
             la fonction retourne None
     """ 
     pass
+
 
 def prochaine_intersection(plateau,pos,direction):
     """calcule la distance de la prochaine intersection
