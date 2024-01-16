@@ -461,22 +461,32 @@ def analyse_plateau(plateau, pos, direction, distance_max):
         emplacement = get_case(plateau, pos)
 
         objet = case.get_objet(emplacement)
-        if objet != const.AUCUN:
+        if objet in const.LES_OBJETS:
             res["objets"].append((distance, objet))
         
-        res["pacmans"] += case.get_pacmans(emplacement)
-        res["fantomes"] += case.get_fantomes(emplacement)
+        res["pacmans"] += [(distance, pacman) for pacman in case.get_pacmans(emplacement)]
+        res["fantomes"] += [(distance, fantome) for fantome in case.get_fantomes(emplacement)]
+
+    
+    pos_arr = pos_arrivee(plateau, pos, direction)
+    if case.est_mur(get_case(plateau, pos_arr)):
+        return 
 
     res = {
         "objets": [],
         "pacmans": [],
         "fantomes": []
     }
-    cases_parcourues = {pos}
-    cases_explorables = [(pos_arrivee(plateau, pos, direction), 1)]
+    
+    cases_parcourues = set()
+    cases_explorables = [(pos_arr, 1)]
 
     while cases_explorables:
         emplacement = min(cases_explorables, key=lambda x: x[1])
+
+        if emplacement[1] > distance_max:
+            return res
+        
         _update_res(plateau, res, emplacement[0], emplacement[1])
         directions = directions_possibles(plateau, emplacement[0])
         cases_parcourues.add(emplacement[0])
