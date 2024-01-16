@@ -460,37 +460,52 @@ def analyse_plateau(plateau, pos, direction, distance_max):
     }
     cases_parcourues = set()
 
-    def _inondation(plateteau, pos, distance):
-        if distance > distance_max or pos in cases_parcourues:
+    def _update_res(pos, distance):
+        case_arr = get_case(plateau, pos)
+
+        fantomes = case.get_fantomes(case_arr)
+        for fantome in fantomes:
+            res["fantomes"].append((distance, fantome))
+
+        pacmans = case.get_pacmans(case_arr)
+        for pacman in pacmans:
+            res["pacmans"].append((distance, pacman))
+
+        objet = case.get_objet(case_arr)
+        if objet != const.AUCUN:
+            res["objets"].append((distance, objet))
+
+
+    def _inondation(pos, distance):
+        if distance > distance_max:
             return
 
+        pos_arr = pos
         for direction in directions_possibles(plateau, pos):
             distance_intersection = prochaine_intersection(plateau, pos, direction)
-            pos_arr = pos
             for i in range(distance_intersection):
-                pos_arr = pos_arrivee(plateau, pos, direction)
+                pos_arr = pos_arrivee(plateau, pos_arr, direction)
 
                 if pos_arr not in cases_parcourues and distance + i <= distance_max:    
-                    case_arr = get_case(plateau, pos_arr)
-                    fantomes = case.get_fantomes(case_arr)
-
-                    for fantome in fantomes:
-                        res["fantomes"].append((distance + i, fantome)) 
-
-                    pacmans = case.get_pacmans(case_arr)
-                    for pacman in pacmans:
-                        res["pacmans"].append((distance + i, pacman))
-
-                    objet = case.get_objet(case_arr)
-                    if objet != const.AUCUN:
-                        res["objets"].append((distance + i, objet))
-
+                    _update_res(pos_arr, distance + i)
                     cases_parcourues.add(pos_arr)
 
             if distance_intersection != -1:
-                _inondation(plateau, pos_arr, distance + distance_intersection)
+                print(cases_parcourues)
+                _inondation(pos_arr, distance + distance_intersection)
 
-    _inondation(plateau, pos, 0)
+    # Parcours le couloir jusqu'à la prochaine intersection
+    distance_intersection = prochaine_intersection(plateau, pos, direction)
+    if distance_intersection == -1:
+        return None
+    
+    for i in range(distance_intersection):
+        pos = pos_arrivee(plateau, pos, direction)
+        _update_res(pos, i)
+        cases_parcourues.add(pos)
+
+    # Commence l'inondation
+    _inondation(pos, distance_intersection)
     return res
 
 
