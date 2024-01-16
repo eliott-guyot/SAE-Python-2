@@ -454,32 +454,33 @@ def analyse_plateau(plateau, pos, direction, distance_max):
             la fonction retourne None
     """ 
     calque={}
-    for i in range (get_nb_colonnes):
+    for i in range (get_nb_colonnes(plateau)):
         calque["i"]=[]
-        for j in range (get_nb_lignes):
-
+        for j in range (get_nb_lignes(plateau)):
+            calque["i"]+=get_case(plateau,pos)
     dico={
         'objets':[],
         'pacmans':[],
         'fantomes':[]
     }
-    i=0
+    indice=0
     case_cote=set()
-    while i<distance_max:
+    while indice<distance_max:
         case_cote.add(prochaine_intersection(plateau,pos,direction))
         for elt in case_cote:
-            if plateau["elt"]==plateau['fantomes']:
-                dico['fantomes']=elt
-            elif plateau["elt"] in plateau['objets']:
-                dico['objets']=elt
-            elif plateau["elt"] in plateau["pacmans"]:
-                dico["pacmans"]=elt
+            if plateau[elt] in plateau['fantomes']:
+                dico['fantomes']=(elt,get_case(plateau,pos))
+            elif plateau[elt] in plateau['objets']:
+                dico['objets']=(elt,get_case(plateau,pos))
+            elif plateau[elt] in plateau["pacmans"]:
+                dico["pacmans"]=(elt,get_case(plateau,pos))
             elif case.est_mur(plateau['elt']):
                 return None
                 
         case_cote=set()      
-        i+=1
-    if i==distance_max:
+        indice+=1
+
+    if indice==distance_max:
         return dico
     else:
         None
