@@ -50,10 +50,10 @@ def pos_ouest(plateau, pos):
         int: un tuple d'entiers
     """
     
-    ouest=[pos[0],pos[1]-1]
-    if ouest[1] < 0:
-        ouest[1]=get_nb_colonnes(plateau)-1
-    return tuple(ouest)
+    if pos[1] - 1 < 0:
+        return pos[0], get_nb_colonnes(plateau) - 1
+    
+    return pos[0], pos[1] - 1
 
 
 def pos_est(plateau, pos):
@@ -66,10 +66,11 @@ def pos_est(plateau, pos):
         int: un tuple d'entiers
     """
     
-    est=[pos[0],pos[1]+1]
-    if est[1] >=get_nb_colonnes(plateau):
-        est[1]=0
-    return tuple(est)
+    if pos[1] + 1 >= get_nb_colonnes(plateau):
+        return pos[0], 0
+    
+    return pos[0], pos[1] + 1
+
 
 def pos_nord(plateau, pos):
     """retourne la position de la case au nord de pos
@@ -81,10 +82,10 @@ def pos_nord(plateau, pos):
         int: un tuple d'entiers
     """
     
-    nord=[pos[0]-1,pos[1]]
-    if nord[0]<0:
-        nord[0]=get_nb_lignes(plateau)-1
-    return tuple(nord)
+    if pos[0] - 1 < 0:
+        return get_nb_lignes(plateau) - 1, pos[1]
+    
+    return pos[0] - 1, pos[1]
 
 
 def pos_sud(plateau, pos):
@@ -97,10 +98,10 @@ def pos_sud(plateau, pos):
         int: un tuple d'entiers
     """
     
-    sud=[pos[0]+1,pos[1]]
-    if sud[0] >=get_nb_lignes(plateau):
-        sud[0]=0
-    return tuple(sud)
+    if pos[0] + 1 >= get_nb_lignes(plateau):
+        return 0, pos[1]
+    
+    return pos[0] + 1, pos[1]
 
 
 def pos_arrivee(plateau,pos,direction):
@@ -198,6 +199,10 @@ def poser_objet(plateau, objet, pos):
     case.poser_objet(get_case(plateau, pos), objet)
 
 
+def plateau_from_str(la_chaine, _=True):
+    Plateau(la_chaine)
+
+
 def Plateau(la_chaine):
     """Construit un plateau à partir d'une chaine de caractère contenant les informations
         sur le contenu du plateau (voir sujet)
@@ -239,17 +244,13 @@ def Plateau(la_chaine):
     nb_pacmans = int(lignes[plateau["taille"][0] + 1])
     for i in range(nb_pacmans):
         pacman = lignes[plateau["taille"][0] + 2 + i].split(";")
-        x, y = int(pacman[1]), int(pacman[2])
-        plateau["pacmans"].add((pacman[0], (x, y)))
-        case.poser_pacman(get_case(plateau, (x, y)), pacman[0])
+        poser_pacman(plateau, pacman[0], (int(pacman[1]), int(pacman[2])))
 
     # Place les fantomes
     nb_fantomes = int(lignes[plateau["taille"][0] + 2 + nb_pacmans])
     for i in range(nb_fantomes):
         fantome = lignes[plateau["taille"][0] + 3 + nb_pacmans + i].split(";")
-        x, y = int(fantome[1]), int(fantome[2])
-        plateau["fantomes"].add((fantome[0], (x, y)))
-        case.poser_fantome(get_case(plateau, (x, y)), fantome[0])
+        poser_fantome(plateau, fantome[0], (int(fantome[1]), int(fantome[2])))
 
     return plateau
 
@@ -353,8 +354,6 @@ def deplacer_pacman(plateau, pacman, pos, direction, passemuraille=False):
     return nouvelle_pos
 
 
-
-    
 def deplacer_fantome(plateau, fantome, pos, direction):
     """Déplace dans la direction indiquée un fantome se trouvant en position pos
         sur le plateau
