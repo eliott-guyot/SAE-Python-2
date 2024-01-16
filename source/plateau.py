@@ -301,7 +301,6 @@ def enlever_fantome(plateau, fantome, pos):
 
     return case.prendre_fantome(get_case(plateau, pos), fantome)
 
-
 def prendre_objet(plateau, pos):
     """Prend l'objet qui se trouve en position pos du plateau et retourne l'entier
         représentant cet objet. const.AUCUN indique qu'aucun objet se trouve sur case
@@ -353,6 +352,8 @@ def deplacer_pacman(plateau, pacman, pos, direction, passemuraille=False):
     return nouvelle_pos
 
 
+
+    
 def deplacer_fantome(plateau, fantome, pos, direction):
     """Déplace dans la direction indiquée un fantome se trouvant en position pos
         sur le plateau
@@ -452,7 +453,7 @@ def analyse_plateau(plateau, pos, direction, distance_max):
                                     et ident est l'identifiant de l'objet, du pacman ou du fantome
             S'il n'est pas possible d'aller dans la direction indiquée à partir de pos
             la fonction retourne None
-    """ 
+    """
     res = {
         "objets": [],
         "pacmans": [],
@@ -522,23 +523,10 @@ def prochaine_intersection(plateau,pos,direction):
         int: un entier indiquant la distance à la prochaine intersection
              -1 si la direction mène à un cul de sac.
     """
-    def _est_intersection(plateau, pos):
-        if len(directions_possibles(plateau, pos)) > 2:
-            return True
-        
-        return False
 
-    distance = 0
-    prochaine_position = pos_arrivee(plateau, pos, direction)
+    case_placement=get_case(plateau,pos)
+    nouvelle_case=pos_arrivee(plateau,pos,direction)
 
-    while not _est_intersection(plateau, prochaine_position):
-        distance += 1
-        prochaine_position = pos_arrivee(plateau, prochaine_position, direction)
-
-        if prochaine_position == pos:
-            return -1
-    
-    return distance
 
 # A NE PAS DEMANDER
 def plateau_2_str(plateau):
