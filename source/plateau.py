@@ -209,6 +209,7 @@ def Plateau(la_chaine):
     # Initialise le plateau
     lignes = la_chaine.split("\n")
     plateau = {
+        "taille": (0, 0),
         "cases": [],
         "pacmans": set(),
         "fantomes": set()
@@ -330,7 +331,24 @@ def deplacer_pacman(plateau, pacman, pos, direction, passemuraille=False):
         (int,int): une paire (lig,col) indiquant la position d'arrivée du pacman 
                    (None si le pacman n'a pas pu se déplacer)
     """
-    pass
+    if (pacman, pos) not in plateau["pacmans"]:
+        return 
+
+    nouvelle_pos = pos_arrivee(plateau, pos, direction)
+    if nouvelle_pos is None:
+        return 
+
+    case_depart = get_case(plateau, pos)
+    nouvelle_case = get_case(plateau, nouvelle_pos)
+
+    if case.est_mur(nouvelle_case) and not passemuraille:
+        return
+    
+    case.prendre_pacman(case_depart, pacman)
+    case.poser_pacman(nouvelle_case, pacman)
+    plateau["pacmans"].remove((pacman, pos))
+    plateau["pacmans"].add((pacman, nouvelle_pos))
+    return nouvelle_pos
 
 
 def deplacer_fantome(plateau, fantome, pos, direction):
@@ -347,7 +365,24 @@ def deplacer_fantome(plateau, fantome, pos, direction):
         (int,int): une paire (lig,col) indiquant la position d'arrivée du fantome
                    None si le joueur n'a pas pu se déplacer
     """
-    pass
+    if (fantome, pos) not in plateau["fantomes"]:
+        return 
+
+    nouvelle_pos = pos_arrivee(plateau, pos, direction)
+    if nouvelle_pos is None:
+        return 
+    
+    case_depart = get_case(plateau, pos)
+    nouvelle_case = get_case(plateau, nouvelle_pos)
+
+    if case.est_mur(nouvelle_case):
+        return 
+    
+    case.prendre_fantome(case_depart, fantome)
+    case.poser_fantome(nouvelle_case, fantome)
+    plateau["fantomes"].remove((fantome, pos))
+    plateau["fantomes"].add((fantome, nouvelle_pos))
+    return nouvelle_pos
 
 
 def case_vide(plateau):
