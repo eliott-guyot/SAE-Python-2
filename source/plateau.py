@@ -466,8 +466,23 @@ def prochaine_intersection(plateau,pos,direction):
         int: un entier indiquant la distance à la prochaine intersection
              -1 si la direction mène à un cul de sac.
     """
+    def _est_intersection(plateau, pos):
+        if len(directions_possibles(plateau, pos)) > 2:
+            return True
+        
+        return False
+
+    distance = 0
+    prochaine_position = pos_arrivee(plateau, pos, direction)
+
+    while not _est_intersection(plateau, prochaine_position):
+        distance += 1
+        prochaine_position = pos_arrivee(plateau, prochaine_position, direction)
+
+        if prochaine_position == pos:
+            return -1
     
-    pass
+    return distance
 
 # A NE PAS DEMANDER
 def plateau_2_str(plateau):
