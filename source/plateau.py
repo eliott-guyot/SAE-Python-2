@@ -351,6 +351,8 @@ def deplacer_pacman(plateau, pacman, pos, direction, passemuraille=False):
     return nouvelle_pos
 
 
+
+    
 def deplacer_fantome(plateau, fantome, pos, direction):
     """Déplace dans la direction indiquée un fantome se trouvant en position pos
         sur le plateau
