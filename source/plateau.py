@@ -300,7 +300,6 @@ def enlever_fantome(plateau, fantome, pos):
 
     return case.prendre_fantome(get_case(plateau, pos), fantome)
 
-
 def prendre_objet(plateau, pos):
     """Prend l'objet qui se trouve en position pos du plateau et retourne l'entier
         représentant cet objet. const.AUCUN indique qu'aucun objet se trouve sur case
@@ -454,8 +453,31 @@ def analyse_plateau(plateau, pos, direction, distance_max):
             S'il n'est pas possible d'aller dans la direction indiquée à partir de pos
             la fonction retourne None
     """ 
-    pass
+    dico={
+        'objets':[],
+        'pacmans':[],
+        'fantomes':[]
+    }
+    i=0
+    case_cote=set()
+    while i<distance_max:
+        case_cote.add(prochaine_intersection(plateau,pos,direction))
+        for elt in case_cote:
+            if plateau["elt"]==plateau['fantomes']:
+                dico['fantomes']=elt
+            elif plateau["elt"] in plateau['objets']:
+                dico['objets']=elt
+            elif plateau["elt"] in plateau["pacmans"]:
+                dico["pacmans"]=elt
+        i+=1
+    if i==distance_max:
+        return dico
+    else:
+        None
 
+
+
+            
 
 def prochaine_intersection(plateau,pos,direction):
     """calcule la distance de la prochaine intersection
@@ -470,23 +492,10 @@ def prochaine_intersection(plateau,pos,direction):
         int: un entier indiquant la distance à la prochaine intersection
              -1 si la direction mène à un cul de sac.
     """
-    def _est_intersection(plateau, pos):
-        if len(directions_possibles(plateau, pos)) > 2:
-            return True
-        
-        return False
 
-    distance = 0
-    prochaine_position = pos_arrivee(plateau, pos, direction)
+    case_placement=get_case(plateau,pos)
+    nouvelle_case=pos_arrivee(plateau,pos,direction)
 
-    while not _est_intersection(plateau, prochaine_position):
-        distance += 1
-        prochaine_position = pos_arrivee(plateau, prochaine_position, direction)
-
-        if prochaine_position == pos:
-            return -1
-    
-    return distance
 
 # A NE PAS DEMANDER
 def plateau_2_str(plateau):
