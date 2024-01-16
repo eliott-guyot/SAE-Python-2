@@ -302,7 +302,6 @@ def enlever_fantome(plateau, fantome, pos):
 
     return case.prendre_fantome(get_case(plateau, pos), fantome)
 
-
 def prendre_objet(plateau, pos):
     """Prend l'objet qui se trouve en position pos du plateau et retourne l'entier
         représentant cet objet. const.AUCUN indique qu'aucun objet se trouve sur case
@@ -354,6 +353,8 @@ def deplacer_pacman(plateau, pacman, pos, direction, passemuraille=False):
     return nouvelle_pos
 
 
+
+    
 def deplacer_fantome(plateau, fantome, pos, direction):
     """Déplace dans la direction indiquée un fantome se trouvant en position pos
         sur le plateau
@@ -434,6 +435,8 @@ def directions_possibles(plateau,pos,passemuraille=False):
 
 #---------------------------------------------------------#
 
+from time import sleep
+
 
 def analyse_plateau(plateau, pos, direction, distance_max):
     """calcul les distances entre la position pos est les différents objets et
@@ -469,9 +472,8 @@ def analyse_plateau(plateau, pos, direction, distance_max):
         "pacmans": [],
         "fantomes": []
     }
-    cases_parcourues = set()
-    cases_explorables = [(pos, 0)]
-    distance = 0
+    cases_parcourues = {pos}
+    cases_explorables = [(pos_arrivee(plateau, pos, direction), 1)]
 
     # Calque
     calque = matrice.new_matrice(get_nb_lignes(plateau), get_nb_colonnes(plateau), "   ")
@@ -480,11 +482,13 @@ def analyse_plateau(plateau, pos, direction, distance_max):
             if case.est_mur(get_case(plateau, (y, x))):
                 matrice.set_val(calque, y, x, None)
 
+
     while cases_explorables:
         for emplacement in cases_explorables:
             directions = directions_possibles(plateau, emplacement[0])
             cases_parcourues.add(emplacement[0])
             matrice.set_val(calque, *emplacement[0], str(emplacement[1]).center(3))
+            matrice.affiche_labyrinthe(calque)
             _update_res(plateau, res, emplacement[0], emplacement[1])
 
             for direction in directions:
@@ -493,7 +497,8 @@ def analyse_plateau(plateau, pos, direction, distance_max):
                     cases_explorables.append((pos_arr, emplacement[1] + 1))
             
             cases_explorables.remove(emplacement)
-            cases_explorables.sort(key=lambda x: x[1])
+            cases_explorables = sorted(cases_explorables, key=lambda x: x[1])[::-1]
+            print(cases_explorables)
 
     matrice.set_val(calque, *pos, "._.")
     matrice.affiche_labyrinthe(calque)
@@ -514,9 +519,9 @@ def prochaine_intersection(plateau,pos,direction):
              -1 si la direction mène à un cul de sac.
     """
     def _est_intersection(plateau, pos):
-        if len(directions_possibles(plateau, pos)) > 2 and distance > 0:
+        if len(directions_possibles(plateau, pos)) > 2:
             return True
-        
+
         return False
 
     distance = 0
@@ -528,8 +533,9 @@ def prochaine_intersection(plateau,pos,direction):
 
         if prochaine_position == pos:
             return -1
-    
+
     return distance
+
 
 # A NE PAS DEMANDER
 def plateau_2_str(plateau):
