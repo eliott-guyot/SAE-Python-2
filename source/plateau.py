@@ -114,19 +114,20 @@ def pos_arrivee(plateau,pos,direction):
     Returns:
         None|tuple: None ou une paire d'entiers indiquant la position d'arrivée
     """
-    match direction:
-        case 'N':
-            pos = pos_nord(plateau, pos)
-        case 'S':
-            pos = pos_sud(plateau, pos)
-        case 'E':
-            pos = pos_est(plateau, pos)
-        case 'O':
-            pos = pos_ouest(plateau, pos)
-        case _:
-            return 
+    if direction == 'N':
+        return pos_nord(plateau, pos)
+
+    elif direction == 'S':
+        return pos_sud(plateau, pos)
     
-    return pos
+    elif direction == 'E':
+        return pos_est(plateau, pos)
+    
+    elif direction == 'O':
+        return pos_ouest(plateau, pos)
+
+    else:
+        return None
 
 
 def get_case(plateau, pos):
@@ -452,7 +453,45 @@ def analyse_plateau(plateau, pos, direction, distance_max):
             S'il n'est pas possible d'aller dans la direction indiquée à partir de pos
             la fonction retourne None
     """ 
-    pass
+    res = {
+        "objets": [],
+        "pacmans": [],
+        "fantomes": []
+    }
+    cases_parcourues = set()
+
+    def _inondation(plateteau, pos, distance):
+        if distance > distance_max or pos in cases_parcourues:
+            return
+
+        for direction in directions_possibles(plateau, pos):
+            distance_intersection = prochaine_intersection(plateau, pos, direction)
+            pos_arr = pos
+            for i in range(distance_intersection):
+                pos_arr = pos_arrivee(plateau, pos, direction)
+
+                if pos_arr not in cases_parcourues and distance + i <= distance_max:    
+                    case_arr = get_case(plateau, pos_arr)
+                    fantomes = case.get_fantomes(case_arr)
+
+                    for fantome in fantomes:
+                        res["fantomes"].append((distance + i, fantome)) 
+
+                    pacmans = case.get_pacmans(case_arr)
+                    for pacman in pacmans:
+                        res["pacmans"].append((distance + i, pacman))
+
+                    objet = case.get_objet(case_arr)
+                    if objet != const.AUCUN:
+                        res["objets"].append((distance + i, objet))
+
+                    cases_parcourues.add(pos_arr)
+
+            if distance_intersection != -1:
+                _inondation(plateau, pos_arr, distance + distance_intersection)
+
+    _inondation(plateau, pos, 0)
+    return res
 
 
 def prochaine_intersection(plateau,pos,direction):
