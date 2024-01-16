@@ -84,6 +84,8 @@ def pos_nord(plateau, pos):
     if nord[0]<0:
         nord[0]=get_nb_lignes(plateau)-1
     return tuple(nord)
+
+
 def pos_sud(plateau, pos):
     """retourne la position de la case au sud de pos
 
@@ -98,6 +100,8 @@ def pos_sud(plateau, pos):
     if sud[0] >=get_nb_lignes(plateau):
         sud[0]=0
     return tuple(sud)
+
+
 def pos_arrivee(plateau,pos,direction):
     """ calcule la position d'arrivée si on part de pos et qu'on va dans
     la direction indiquée en tenant compte que le plateau est un tore
@@ -120,14 +124,8 @@ def pos_arrivee(plateau,pos,direction):
         case 'O':
             pos = pos_ouest(plateau, pos)
         case _:
-            return "Tom"
+            return 
     
-    if pos[0] >= get_nb_lignes(plateau) - 1:
-        pos = (0, pos[1])
-
-    if pos[0] < 0:
-        pos = (get_nb_lignes(plateau) - 1, pos[1])
-
     return pos
 
 
