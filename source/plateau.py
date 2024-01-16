@@ -11,6 +11,7 @@ import random
 
 import case
 import const
+import matrice  # TODO : à supprimer
 
 
 def get_nb_lignes(plateau):
@@ -453,59 +454,49 @@ def analyse_plateau(plateau, pos, direction, distance_max):
             S'il n'est pas possible d'aller dans la direction indiquée à partir de pos
             la fonction retourne None
     """ 
+    def _update_res(plateau, res, pos, distance):
+        emplacement = get_case(plateau, pos)
+
+        objet = case.get_objet(emplacement)
+        if objet != const.AUCUN:
+            res["objets"].append((distance, objet))
+        
+        res["pacmans"] += case.get_pacmans(emplacement)
+        res["fantomes"] += case.get_fantomes(emplacement)
+
     res = {
         "objets": [],
         "pacmans": [],
         "fantomes": []
     }
     cases_parcourues = set()
+    cases_explorables = [(pos, 0)]
+    distance = 0
 
-    def _update_res(pos, distance):
-        case_arr = get_case(plateau, pos)
+    # Calque
+    calque = matrice.new_matrice(get_nb_lignes(plateau), get_nb_colonnes(plateau), "   ")
+    for x in range(get_nb_colonnes(plateau)):
+        for y in range(get_nb_lignes(plateau)):
+            if case.est_mur(get_case(plateau, (y, x))):
+                matrice.set_val(calque, y, x, None)
 
-        fantomes = case.get_fantomes(case_arr)
-        for fantome in fantomes:
-            res["fantomes"].append((distance, fantome))
+    while cases_explorables:
+        for emplacement in cases_explorables:
+            directions = directions_possibles(plateau, emplacement[0])
+            cases_parcourues.add(emplacement[0])
+            matrice.set_val(calque, *emplacement[0], str(emplacement[1]).center(3))
+            _update_res(plateau, res, emplacement[0], emplacement[1])
 
-        pacmans = case.get_pacmans(case_arr)
-        for pacman in pacmans:
-            res["pacmans"].append((distance, pacman))
+            for direction in directions:
+                pos_arr = pos_arrivee(plateau, emplacement[0], direction)
+                if pos_arr not in cases_parcourues:
+                    cases_explorables.append((pos_arr, emplacement[1] + 1))
+            
+            cases_explorables.remove(emplacement)
+            cases_explorables.sort(key=lambda x: x[1])
 
-        objet = case.get_objet(case_arr)
-        if objet != const.AUCUN:
-            res["objets"].append((distance, objet))
-
-
-    def _inondation(pos, distance):
-        if distance > distance_max:
-            return
-
-        pos_arr = pos
-        for direction in directions_possibles(plateau, pos):
-            distance_intersection = prochaine_intersection(plateau, pos, direction)
-            for i in range(distance_intersection):
-                pos_arr = pos_arrivee(plateau, pos_arr, direction)
-
-                if pos_arr not in cases_parcourues and distance + i <= distance_max:    
-                    _update_res(pos_arr, distance + i)
-                    cases_parcourues.add(pos_arr)
-
-            if distance_intersection != -1:
-                print(cases_parcourues)
-                _inondation(pos_arr, distance + distance_intersection)
-
-    # Parcours le couloir jusqu'à la prochaine intersection
-    distance_intersection = prochaine_intersection(plateau, pos, direction)
-    if distance_intersection == -1:
-        return None
-    
-    for i in range(distance_intersection):
-        pos = pos_arrivee(plateau, pos, direction)
-        _update_res(pos, i)
-        cases_parcourues.add(pos)
-
-    # Commence l'inondation
-    _inondation(pos, distance_intersection)
+    matrice.set_val(calque, *pos, "._.")
+    matrice.affiche_labyrinthe(calque)
     return res
 
 
@@ -523,7 +514,7 @@ def prochaine_intersection(plateau,pos,direction):
              -1 si la direction mène à un cul de sac.
     """
     def _est_intersection(plateau, pos):
-        if len(directions_possibles(plateau, pos)) > 2:
+        if len(directions_possibles(plateau, pos)) > 2 and distance > 0:
             return True
         
         return False
