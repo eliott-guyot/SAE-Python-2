@@ -14,15 +14,16 @@
 """
 import argparse
 import random
+
+import case
 import client
 import const
-import plateau
-import case
 import joueur
+import plateau
 
 prec='X'
 
-def mon_IA(ma_couleur,carac_jeu, plan, les_joueurs):
+def mon_IA(ma_couleur: str,carac_jeu, plan, les_joueurs):
     """ Cette fonction permet de calculer les deux actions du joueur de couleur ma_couleur
         en fonction de l'état du jeu décrit par les paramètres. 
         Le premier caractère est parmi XSNOE X indique pas de peinture et les autres
@@ -51,8 +52,17 @@ def mon_IA(ma_couleur,carac_jeu, plan, les_joueurs):
     
     # IA complètement aléatoire
     dir_p=  random.choice("NESO")
-    dir_f=  random.choice("NESO")
-    return dir_p+dir_f          
+
+    # Vérifie si l'ia est un joueur ou un fantôme
+    
+    distancees = {}
+    for direction in const.DIRECTIONS:
+        distancees[direction] = plateau.analyse_plateau(le_plateau, joueurs[ma_couleur], direction)
+    
+    dir_f = min(distancees, lambda direction: distancees[direction]["joueurs"])
+
+    return dir_p+dir_f
+
 
 if __name__=="__main__":
     parser = argparse.ArgumentParser()  
