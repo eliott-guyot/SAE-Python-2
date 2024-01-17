@@ -226,7 +226,7 @@ def Plateau(la_chaine):
     taille = lignes[0].split(";")
     plateau["taille"] = (int(taille[0]), int(taille[1]))
 
-    # Construit le labirynthe
+    # Construit le labyrinthe
     for y in range(plateau["taille"][0]):
         plateau["cases"].append([])
 
@@ -298,10 +298,12 @@ def enlever_fantome(plateau, fantome, pos):
         bool: True si l'opération s'est bien déroulée, False sinon
     """
 
-    if fantome in plateau["fantomes"]:
+    if case.prendre_fantome(get_case(plateau, pos), fantome):
         plateau["fantomes"].remove((fantome, pos))
+        return True
 
-    return case.prendre_fantome(get_case(plateau, pos), fantome)
+    return False
+
 
 def prendre_objet(plateau, pos):
     """Prend l'objet qui se trouve en position pos du plateau et retourne l'entier
@@ -317,7 +319,7 @@ def prendre_objet(plateau, pos):
     """
     
     return case.prendre_objet(get_case(plateau, pos))
-        
+    
 
 def deplacer_pacman(plateau, pacman, pos, direction, passemuraille=False):
     """Déplace dans la direction indiquée un joueur se trouvant en position pos
@@ -513,16 +515,10 @@ def prochaine_intersection(plateau,pos,direction):
         int: un entier indiquant la distance à la prochaine intersection
              -1 si la direction mène à un cul de sac.
     """
-    def _est_intersection(plateau, pos):
-        if len(directions_possibles(plateau, pos)) > 2:
-            return True
-
-        return False
-
     distance = 0
     prochaine_position = pos_arrivee(plateau, pos, direction)
 
-    while not _est_intersection(plateau, prochaine_position):
+    while not len(directions_possibles(plateau, prochaine_position)) > 2:
         distance += 1
         prochaine_position = pos_arrivee(plateau, prochaine_position, direction)
 
